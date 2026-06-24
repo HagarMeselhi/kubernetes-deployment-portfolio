@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: devops-portfolio-api-config
+  namespace: devops-portfolio
+data:
+  NODE_ENV: "production"
+  APP_NAME: "devops-portfolio-api"
+  LOG_LEVEL: "info"

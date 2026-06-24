@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: devops-portfolio-api
+  namespace: devops-portfolio
+  labels:
+    app: devops-portfolio-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: devops-portfolio-api
+  template:
+    metadata:
+      labels:
+        app: devops-portfolio-api
+    spec:
+      containers:
+        - name: api
+          image: ghcr.io/hagarmeselhi/devops-portfolio-api:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: devops-portfolio-api-config
+            - secretRef:
+                name: devops-portfolio-api-secret
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"

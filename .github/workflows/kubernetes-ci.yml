@@ -1,0 +1,28 @@
+name: Kubernetes CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-kubernetes-manifests:
+    name: Validate Kubernetes Manifests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate manifests with kubeconform
+        run: |
+          docker run --rm \
+            -v "${PWD}:/work" \
+            ghcr.io/yannh/kubeconform:latest \
+            -strict \
+            -summary \
+            /work/k8s/*.yaml
