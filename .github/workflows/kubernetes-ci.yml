@@ -22,7 +22,14 @@ jobs:
         run: |
           docker run --rm \
             -v "${PWD}:/work" \
+            -w /work \
             ghcr.io/yannh/kubeconform:latest \
             -strict \
             -summary \
-            /work/k8s/*.yaml
+            k8s/namespace.yaml \
+            k8s/configmap.yaml \
+            k8s/secret.yaml \
+            k8s/deployment.yaml \
+            k8s/service.yaml \
+            k8s/ingress.yaml \
+            k8s/hpa.yaml
